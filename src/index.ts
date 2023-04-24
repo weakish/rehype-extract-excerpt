@@ -16,13 +16,17 @@ export interface RehypeExtractExcerptOptions {
 
   /** Truncate the excerpt at word boundary. defaults to `true` */
   wordBoundaries?: boolean
+
+  /** The HTML tag name for the excerpt content. defaults to `p` */
+  tagName?: string
 }
 
 const defaults: RehypeExtractExcerptOptions = {
   name: 'excerpt',
   maxLength: 140,
   ellipsis: '...',
-  wordBoundaries: true
+  wordBoundaries: true,
+  tagName: 'p'
 }
 
 const rehypeExtractExcerpt: Plugin<
@@ -51,7 +55,7 @@ const rehypeExtractExcerpt: Plugin<
     const excerpt: string[] = []
 
     visit(tree, 'element', (node: Element) => {
-      if (node.tagName !== 'p') {
+      if (node.tagName !== options.tagName) {
         return
       }
 
@@ -60,7 +64,7 @@ const rehypeExtractExcerpt: Plugin<
           toString(node),
           options.maxLength!,
           options.ellipsis!,
-          options.wordBoundaries!
+          options.wordBoundaries!,
         )
       )
 
